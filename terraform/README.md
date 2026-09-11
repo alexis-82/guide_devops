@@ -200,7 +200,7 @@ resource "aws_instance" "app_server" {
   ami = "ami-000000000000"
   instance_type = "t2.micro"
 
-  key_name               = "terraform-key"                       # nome esatto della key pair su AWS
+  key_name               = "terraform-key" # nome esatto della key pair su AWS
 
   tags = {
     Name = "NomeDellInstanza"
@@ -229,7 +229,7 @@ Crei la key pair dalla console AWS, AWS genera la coppia e ti fa scaricare **una
 
 ---
 
-## Procedura chiave `.pem`
+### Procedura chiave `.pem`
 
 Il `.pem` scaricato **è la tua chiave privata SSH**
 
@@ -280,4 +280,19 @@ output "ssh_command" {
 }
 ```
 
+## Metodo per assegnazione spazio archivio
+
+Aggiungere all'interno di **resource "aws_instance"** questo blocco per
+personalizzare il disco root (di default molte AMI Ubuntu partono con 8 GB):
+
+```hcl
+root_block_device {
+  volume_size = 20      # dimensione in GB (max 30 GB per il Free Tier)
+  volume_type = "gp3"   # SSD general purpose, più economico e performante di gp2
+}
+```
+
+> **Free Tier**: hai 30 GB/mese di EBS General Purpose SSD inclusi.
+> Il conteggio è cumulativo su tutte le istanze attive.
+```
 ---
