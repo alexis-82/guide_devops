@@ -186,12 +186,12 @@ kubectl get namespaces
 **Alternativa più pulita**: se vuoi ripartire da zero, crea un namespace dedicato per gli esperimenti e cancella quello.
 
 ```bash
-# Crea namespace di test
+# Crea namespace di test (abbreviato ns)
 kubectl create namespace lab
 
 # Deploya risorse dentro il namespace
 kubectl create deployment nginx-deploy --image=nginx -n lab
 
-# Quando hai finito, cancella tutto in un colpo
+# Quando hai finito, cancella tutto in un colpo (abbreviato ns)
 kubectl delete namespace lab
 ```

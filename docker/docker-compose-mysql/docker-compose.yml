@@ -1,0 +1,20 @@
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    env_file:
+      - ./mysql.env
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./database/data:/var/lib/mysql
+      #- ./mysql-config/my.cnf:/etc/mysql/conf.d/my.cnf  # Monta il file di configurazione custom
+    networks:
+      my_macvlan_network:
+        ipv4_address: 192.168.1.100  # Assicurati che questo IP sia libero nella tua rete
+
+networks:
+  my_macvlan_network:
+    external: true
+    name: my_macvlan_network

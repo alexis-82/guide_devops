@@ -1,0 +1,41 @@
+services:
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    restart: always
+    env_file:
+      - ./mongo.env
+    volumes:
+      - ./mongo-data:/data/db
+    networks:
+      my_macvlan_network:
+        ipv4_address: 192.168.1.195
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongodb
+    env_file:
+      - ./mongo-express.env
+    networks:
+      my_macvlan_network:
+        ipv4_address: 192.168.1.194
+
+volumes:
+  mongo-data:
+    driver: local
+
+networks:
+  my_macvlan_network:
+    driver: macvlan
+    driver_opts:
+      parent: ens32  # Assicurati che questo sia il nome corretto dell'interfaccia
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
+          gateway: 192.168.1.1  # Assicurati che questo sia il gateway corretto della tua rete
+          ip_range: 192.168.1.192/28  # Corretto come suggerito dall'errore

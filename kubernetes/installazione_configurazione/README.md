@@ -1,6 +1,8 @@
+[![kubernetes.png](https://i.ibb.co/JRVzfRLg/kubernetes.png)](https://ibb.co/LzmCLzwH)
+
 # Kubernetes Lab: cluster multi-nodo con kubeadm su VMware
 
-Guida operativa per creare un cluster Kubernetes realistico a 3 nodi (1 control plane + 2 worker) su VMware Workstation, come alternativa a minikube per studio e sperimentazione.
+Guida operativa per creare un cluster Kubernetes realistico a 3 nodi (1 control plane + 2 worker) su VMware Workstation.
 
 ---
 
@@ -172,7 +174,7 @@ kubelet --version
 
 L'obiettivo è poter fare SSH dalla macchina di gestione (Windows o Linux) alla VM senza password.
 
-**Da Windows (PowerShell):**
+**Da Windows (PowerShell host):**
 
 ```powershell
 # Genera la chiave (se non ne hai già una)
@@ -549,9 +551,20 @@ kubectl get nodes
 
 ### 7.2 OpenLens (GUI desktop)
 
-Alternativa a Lens senza registrazione: [github.com/MuhammedKalkan/OpenLens/releases](https://github.com/MuhammedKalkan/OpenLens/releases)
+Alternativa a Lens (più completo) senza registrazione: [github.com/MuhammedKalkan/OpenLens/releases](https://github.com/MuhammedKalkan/OpenLens/releases)
+Lens con registrazione: [https://lenshq.io/](https://lenshq.io/)
 
 Dopo l'installazione: `File → Add Cluster` → seleziona `%USERPROFILE%\.kube\config`. Riavvia OpenLens se il cluster non appare subito.
+
+Comandi per visualizzare la telemetria:
+
+```bash
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl patch deployment metrics-server -n kube-system --type=json -p='[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls"}]'
+kubectl get pods -n kube-system | grep metrics-server -w
+kubectl top nodes
+kubectl top pods -A
+```
 
 ### 7.3 k9s (TUI sul master)
 
@@ -854,6 +867,21 @@ sudo systemctl restart containerd
 
 Poi rifai `kubeadm init` sul master con il CIDR nuovo e installi il nuovo CNI. Se hai fatto lo **snapshot VMware** come consigliato, la strada più pulita è rollback + re-init da zero.
 
+### Accesso diretto da host
+
+Serve per eseguire kubectl nel terminale del nostro host (Windows, Linux, macOS):
+Link ufficiale download kubectl: [https://kubernetes.io/docs/tasks/tools/](https://kubernetes.io/docs/tasks/tools/)
+
+```bash
+$env:KUBECONFIG="$env:USERPROFILE\.kube\config" (Windows, potrebbe essere già configurato in automatico senza path)
+export KUBECONFIG=~/.kube/config (Linux, macOS)
+```
+### Solo per la sessione corrente. Per renderla permanente:
+
+```powershell
+[System.Environment]::SetEnvironmentVariable('KUBECONFIG', "$env:USERPROFILE\.kube\config", 'User')
+```
+
 ---
 
 ## Riferimenti
@@ -866,3 +894,9 @@ Poi rifai `kubeadm init` sul master con il CIDR nuovo e installi il nuovo CNI. S
 - k9s: [k9scli.io](https://k9scli.io/)
 - OpenLens: [github.com/MuhammedKalkan/OpenLens](https://github.com/MuhammedKalkan/OpenLens)
 - crictl (cri-tools): [github.com/kubernetes-sigs/cri-tools](https://github.com/kubernetes-sigs/cri-tools)
+
+## Screenshot
+
+[![kubernetes-cluster-architecture.jpg](https://i.ibb.co/R4bZP8Zz/kubernetes-cluster-architecture.jpg)](https://ibb.co/3YdGWKGB)
+
+[![Screenshot-20260911-175530.png](https://i.ibb.co/ycdqZ6HC/Screenshot-20260911-175530.png)](https://ibb.co/C3mQYbRy)
