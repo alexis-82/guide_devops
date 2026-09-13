@@ -148,7 +148,13 @@ Per iniziare va benissimo l'`export` a mano; `aws-vault` te lo consiglio quando 
 
 ## 4. Test rapido: primo provider AWS
 
-Crea `main.tf`:
+Come prima cosa bisogna individuare il nostro indirizzo IP pubblico host:
+
+```bash
+curl ifconfig.me
+```
+
+Ora crea `main.tf`:
 
 ```hcl
 terraform {
@@ -217,6 +223,18 @@ output "ssh_command" {
   description = "Comando pronto per connettersi via SSH"
 }
 ```
+Esegui:
+
+```bash
+terraform init      # scarica il provider AWS
+terraform fmt       # controllo indentazione file .tf
+terraform validate  # validazione del file .tf
+terraform plan      # anteprima delle modifiche
+terraform apply     # applica (chiede conferma)
+terraform destroy   # distruzione dell'instanza
+```
+
+Se `terraform apply` restituisce l'Account ID, l'integrazione Terraform ↔ AWS funziona.
 
 ## Aggiungere una Key Pair per l'accesso SSH
 
@@ -294,5 +312,6 @@ root_block_device {
 
 > **Free Tier**: hai 30 GB/mese di EBS General Purpose SSD inclusi.
 > Il conteggio è cumulativo su tutte le istanze attive.
-```
+
+
 ---
