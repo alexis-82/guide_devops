@@ -897,6 +897,6 @@ export KUBECONFIG=~/.kube/config (Linux, macOS)
 
 ## Screenshot
 
-[![kubernetes-cluster-architecture.jpg](https://i.ibb.co/R4bZP8Zz/kubernetes-cluster-architecture.jpg)](https://ibb.co/3YdGWKGB)
+[![kubernetes-cluster-architecture.jpg](https://i.ibb.co/R4bZP8Zz/kubernetes-cluster-architecture.jpg)](https://i.ibb.co/R4bZP8Zz/kubernetes-cluster-architecture.jpg)
 
-[![Screenshot-20260911-175530.png](https://i.ibb.co/ycdqZ6HC/Screenshot-20260911-175530.png)](https://ibb.co/C3mQYbRy)
+[![Screenshot-20260911-175530.png](https://i.ibb.co/ycdqZ6HC/Screenshot-20260911-175530.png)](https://i.ibb.co/ycdqZ6HC/Screenshot-20260911-175530.png)

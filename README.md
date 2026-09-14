@@ -62,7 +62,7 @@ Installazione di Terraform su Linux e provisioning su AWS.
 
 ## Autore
 
-**[Alessio](https://github.com/alexis-82)** — Sviluppatore full-stack (React/TypeScript, Node.js, Python) e Linux enthusiast.
+**[Alessio Abrugiati](https://github.com/alexis-82)** — Sviluppatore full-stack (React/TypeScript, Node.js, Python) e Linux enthusiast.
 Appunti maturati sul campo tra sviluppo, self-hosting e sperimentazione DevOps.
 
 ## Licenza
