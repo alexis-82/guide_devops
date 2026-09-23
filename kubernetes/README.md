@@ -1,4 +1,4 @@
-[![kubernetes.png](https://i.ibb.co/JRVzfRLg/kubernetes.png)](https://ibb.co/LzmCLzwH)
+[![kubernetes.png](https://i.ibb.co/JRVzfRLg/kubernetes.png)](https://i.ibb.co/JRVzfRLg/kubernetes.png)
 
 # Kubernetes Lab: cluster multi-nodo con kubeadm su VMware
 
