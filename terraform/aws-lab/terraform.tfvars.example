@@ -1,0 +1,17 @@
+# Copia in terraform.tfvars e personalizza (terraform.tfvars è nel .gitignore).
+
+# Il tuo IP pubblico: curl -s https://checkip.amazonaws.com
+my_ip = "93.45.12.34/32"
+
+# Chiave pubblica SSH (ssh-keygen -t ed25519 se non ce l'hai)
+ssh_public_key_path = "~/.ssh/id_ed25519.pub"
+
+# Profilo AWS CLI creato con: aws configure --profile lab
+aws_profile = "lab"
+
+# Alert di spesa (solo workspace aws)
+budget_email     = "tua@email.it"
+budget_limit_usd = 5
+
+# Esercizio: S3 gateway endpoint
+# enable_s3_endpoint = true

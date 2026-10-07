@@ -1,0 +1,13 @@
+# State e cache: contengono segreti (password del DB inclusa)
+*.tfstate
+*.tfstate.*
+terraform.tfstate.d/
+.terraform/
+crash.log
+
+# Variabili personali (IP, email)
+terraform.tfvars
+*.auto.tfvars
+
+# Piani salvati
+*.tfplan

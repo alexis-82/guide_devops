@@ -1,0 +1,63 @@
+#!/bin/bash
+# Bootstrap dell'istanza web. Gira una volta, come root, al primo avvio.
+# Log su AWS: /var/log/cloud-init-output.log
+set -euxo pipefail
+
+dnf install -y nginx nodejs mariadb105 awscli-2 jq
+
+# Configurazione applicativa: solo NOMI dei parametri, nessun segreto su disco.
+cat > /etc/lab.env <<'EOF'
+AWS_REGION=${region}
+AWS_PAGER=
+LAB_PARAM_PREFIX=/${project}
+EOF
+
+# Instance ID da IMDSv2 (token + richiesta): niente dipendenza da "hostname",
+# che nelle immagini minimali non c'è. Fallback sulla variabile di bash.
+cat > /usr/local/bin/instance-id <<'EOF'
+#!/bin/bash
+t=$(curl -sf -m 2 -X PUT http://169.254.169.254/latest/api/token -H "X-aws-ec2-metadata-token-ttl-seconds: 60") \
+  && curl -sf -m 2 -H "X-aws-ec2-metadata-token: $t" http://169.254.169.254/latest/meta-data/instance-id \
+  || echo "$${HOSTNAME:-unknown}"
+EOF
+chmod 755 /usr/local/bin/instance-id
+
+# Script di verifica: legge i parametri da SSM con il ruolo IAM dell'istanza,
+# si connette a RDS e fa un giro di upload/download su S3.
+cat > /usr/local/bin/lab-check <<'EOF'
+#!/bin/bash
+set -euo pipefail
+source /etc/lab.env
+export AWS_REGION AWS_PAGER   # niente pager: nei script la CLI non deve aspettare "less"
+p() { aws ssm get-parameter --name "$LAB_PARAM_PREFIX/$1" --with-decryption --query Parameter.Value --output text; }
+
+echo "== Identità (ruolo IAM via IMDS)"
+aws sts get-caller-identity --query Arn --output text
+
+DB_HOST=$(p db/host); DB_PORT=$(p db/port); DB_USER=$(p db/user); BUCKET=$(p s3/bucket)
+export MYSQL_PWD=$(p db/password)   # non sulla riga di comando: sarebbe visibile in ps
+
+echo "== RDS ($DB_HOST:$DB_PORT)"
+mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" --connect-timeout=5 \
+  -e "SELECT VERSION() AS mysql, NOW() AS ora;"
+
+IID=$(instance-id)
+echo "== S3 ($BUCKET)"
+echo "ciao da $IID $(date -Is)" > /tmp/lab-check.txt
+aws s3 cp /tmp/lab-check.txt "s3://$BUCKET/checks/$IID.txt"
+aws s3 ls "s3://$BUCKET/checks/"
+echo "== Tutto OK"
+EOF
+chmod 755 /usr/local/bin/lab-check
+
+cat > /usr/share/nginx/html/index.html <<EOF
+<h1>${project}</h1>
+<p>Istanza: $(instance-id)</p>
+EOF
+
+# Su AWS c'è systemd; nel container di Floci no, quindi avviamo nginx direttamente.
+if [ -d /run/systemd/system ]; then
+  systemctl enable --now nginx
+else
+  nginx
+fi
