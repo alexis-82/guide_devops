@@ -4,35 +4,44 @@ Scenario da laboratorio per fare pratica dopo l'AWS Cloud Practitioner:
 
 ```mermaid
 flowchart TB
-    user(["Utente / browser"])
+    user(["👤 Utente / browser"])
 
-    subgraph region["Region eu-south-1"]
-        subgraph vpc["VPC 10.0.0.0/16"]
-            igw["Internet gateway"]
-
-            subgraph pub["Subnet pubblica 10.0.1.0/24 · AZ a"]
-                ec2["EC2 t3.micro · AL2023<br/>nginx · IMDSv2<br/>SG-web: 80/443 tutti · 22 mio IP"]
-            end
-
-            subgraph priv["Subnet private 10.0.2.0/24 · 10.0.3.0/24 · AZ a + b"]
-                rds[("RDS MySQL 8.0 · db.t3.micro<br/>SG-db: 3306 solo da SG-web<br/>publicly_accessible = false")]
-            end
+    subgraph vpc["☁️ VPC 10.0.0.0/16 · eu-south-1"]
+        direction LR
+        igw["Internet<br/>gateway"]
+        subgraph pub["Subnet pubblica"]
+            ec2["<b>EC2</b> t3.micro<br/>nginx · IMDSv2<br/><i>SG-web</i>"]
         end
-
-        role{{"Ruolo IAM + instance profile<br/>minimo privilegio"}}
-        s3[("S3 bucket<br/>privato · SSE · versioning")]
-        ssm["SSM Parameter Store<br/>/aws-lab/db/* · /aws-lab/s3/*"]
+        subgraph priv["Subnet private · 2 AZ"]
+            rds[("<b>RDS</b> MySQL 8.0<br/>non pubblico<br/><i>SG-db</i>")]
+        end
+        igw --> ec2
+        ec2 -- "3306" --> rds
     end
 
-    user -- "HTTP/HTTPS" --> igw --> ec2
-    ec2 -- "MySQL (porta da SSM)" --> rds
-    ec2 -. "credenziali via IMDS" .- role
-    role -- "Get/Put/Delete objects" --> s3
-    role -- "GetParameter (SecureString)" --> ssm
+    subgraph svc["🔐 Servizi regionali"]
+        direction LR
+        role{{"<b>Ruolo IAM</b><br/>minimo privilegio"}}
+        s3[("<b>S3</b><br/>privato · SSE")]
+        ssm["<b>SSM</b><br/>Parameter Store"]
+        s3 ~~~ role ~~~ ssm
+    end
+
+    user -- "HTTP / HTTPS" --> igw
+    ec2 -. "credenziali via IMDS" .-> role
+    role --> s3
+    role --> ssm
 ```
 
-Route table pubblica: `0.0.0.0/0 → IGW`. Route table privata: solo la rotta `local`
-(nessun NAT gateway). Tutte le risorse hanno il tag `Project=aws-lab`.
+| Componente | Regole chiave |
+|---|---|
+| **SG-web** | 80/443 da tutti · 22 solo da `my_ip` · egress libero |
+| **SG-db** | 3306 solo dal security group SG-web (non da un CIDR) |
+| **Route table pubblica** | `0.0.0.0/0 → Internet gateway` |
+| **Route table privata** | solo `local`: nessuna uscita, nessun NAT gateway |
+| **Ruolo IAM** | `s3:Get/Put/DeleteObject` sul bucket · `ssm:GetParameter` su `/aws-lab/*` |
+
+Tutte le risorse hanno il tag `Project=aws-lab`.
 
 Lo stesso codice gira su **Floci** (emulatore locale, gratis) e su **AWS reale** (Free plan).
 Il target è il **workspace Terraform**: ogni target ha il suo state, quindi non puoi
