@@ -12,9 +12,8 @@ campo, configurazioni funzionanti da riusare. Tutto in italiano.
 
 ### ☸️ [Kubernetes](./kubernetes/)
 
-Cluster `kubeadm` multi-nodo su VMware, dall'installazione al day-2.
+Cluster `kubeadm` multi-nodo su VMware: comandi e manifest per il lavoro quotidiano.
 
-- **[Installazione e configurazione cluster](./kubernetes/installazione_configurazione/)** — Guida completa da zero: template VM, containerd, CNI, clonazione, bootstrap con `kubeadm init`, hardening SSH.
 - **[Cheatsheet comandi `kubectl`](./kubernetes/comandi/)** — Comandi base per il lavoro quotidiano: pod, deployment, rollout, manifest YAML, pulizia risorse. Testato su cluster `kubeadm` v1.37.
 - **[Esempi YAML](./kubernetes/examples-yaml/)** — *(work in progress)*
 
@@ -29,6 +28,8 @@ Installazione di Docker Compose V2 su Debian/Ubuntu e progetti di esempio.
 - **[MySQL + phpMyAdmin](./docker/docker-compose-mysql-phpmyadmin/)**
 - **[Flask](./docker/docker-flask/)** — Applicazione Python containerizzata.
 - **[Docker network bridge](./docker/docker-network-bridge/)**
+- **[Sito statico su AWS EC2 (Nginx + Caddy)](./docker/docker-Nginx-Caddy-sito-statico-AWS/)** — File già buildati caricati con rsync, HTTPS automatico con Let's Encrypt.
+- **[React/Vite su AWS EC2 (build Docker + Nginx + Caddy)](./docker/docker-React-Vite-Nginx-Caddy-AWS/)** — Build multi-stage sul server, deploy con `git pull`.
 - **[Script di utilità](./docker/scripts/)** — Cleanup completo e upgrade automatico di `docker-compose`.
 
 ### 🤖 [Ansible](./ansible/)
@@ -45,7 +46,8 @@ Installazione di Terraform su Linux e provisioning su AWS.
 
 - **[Installazione + configurazione AWS con utente IAM dedicato](./terraform/)**
 - **[Cheatsheet comandi](./terraform/comandi/)** — `init`, `plan`, `apply`, `destroy`, workspace, state.
-- **[Esempi `.tf`](./terraform/examples-tf/)** — *(work in progress)*
+- **[aws-lab](./terraform/aws-lab/)** — Lab EC2 + RDS + S3 (VPC, IAM, SSM, budget), su Floci o AWS reale.
+- **[Floci](./terraform/floci/)** — Setup di una VM Linux per l'emulatore AWS locale Floci: AWS CLI e Terraform senza account AWS.
 
 ---
 
