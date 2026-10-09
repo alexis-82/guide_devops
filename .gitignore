@@ -1,0 +1,6 @@
+.vscode
+programma_progetto.txt
+
+# File di variabili reali: si versionano solo i *.env.example
+*.env
+.env

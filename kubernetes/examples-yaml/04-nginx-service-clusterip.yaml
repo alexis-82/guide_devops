@@ -1,0 +1,12 @@
+# Service interno (ClusterIP): è il backend a cui punta l'Ingress.
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-demo
+spec:
+  type: ClusterIP
+  selector:
+    app: nginx-demo
+  ports:
+    - port: 80
+      targetPort: 80

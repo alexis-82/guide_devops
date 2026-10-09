@@ -1,0 +1,13 @@
+# Regole yamllint per la CI: controlla sintassi e indentazione,
+# senza imporre stile su commenti e lunghezza righe.
+extends: default
+
+rules:
+  document-start: disable
+  line-length: disable
+  comments:
+    min-spaces-from-content: 1
+  new-lines: disable  # git normalizza a LF, evita falsi positivi su Windows
+  truthy:
+    allowed-values: ["true", "false", "yes", "no"]
+    check-keys: false

@@ -4,8 +4,8 @@
   become: yes
   tasks:
     - copy:
-		src: /home/alessio/ciccio.txt
-		dest: /home/alessio/ciccio
-		owner: alessio
-		group: alessio
-		mode: 0644
+        src: /home/alessio/ciccio.txt
+        dest: /home/alessio/ciccio
+        owner: alessio
+        group: alessio
+        mode: "0644"

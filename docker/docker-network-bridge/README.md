@@ -24,7 +24,7 @@ docker network create -d macvlan \
 ```yaml
 services:
   db:
-    image: mysql:latest
+    image: mysql:8.4
     container_name: mysql_db
     restart: always
     env_file:
@@ -42,7 +42,7 @@ services:
       retries: 5
 
   phpmyadmin:
-    image: phpmyadmin:latest
+    image: phpmyadmin:5.2
     container_name: phpmyadmin
     restart: always
     depends_on:

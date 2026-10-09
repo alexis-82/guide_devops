@@ -1,6 +1,6 @@
 services:
   mongodb:
-    image: mongo
+    image: mongo:7.0
     ports:
       - "27017:27017"
     restart: always
@@ -13,7 +13,7 @@ services:
         ipv4_address: 192.168.1.195
 
   mongo-express:
-    image: mongo-express
+    image: mongo-express:1.0.2
     restart: always
     ports:
       - "8081:8081"

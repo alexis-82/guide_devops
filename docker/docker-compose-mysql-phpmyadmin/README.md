@@ -19,7 +19,7 @@ Per configurare Docker Compose con MySQL e phpMyAdmin, crea un file docker-compo
 ```yaml
 services:
   db:
-    image: mysql:latest
+    image: mysql:8.4
     restart: always
     env_file:
       - ./mysql.env
@@ -29,7 +29,7 @@ services:
       - "3306:3306"
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
+    image: phpmyadmin/phpmyadmin:5.2
     restart: always
     depends_on:
       - db
@@ -41,7 +41,14 @@ services:
 
 2. **Crea i file .env**
 
-    Crea un file `mysql.env` e nella stessa directory con le seguenti variabili:
+    Nella repo trovi i modelli `mysql.env.example` e `phpmyadmin.env.example`: copiali e cambia le password. I file `.env` reali sono esclusi da git tramite `.gitignore`, così le credenziali non finiscono mai nel repository.
+
+    ```bash
+    cp mysql.env.example mysql.env
+    cp phpmyadmin.env.example phpmyadmin.env
+    ```
+
+    Contenuto di `mysql.env`:
 
     ```
     MYSQL_DATABASE=dbname
@@ -50,13 +57,13 @@ services:
     MYSQL_ROOT_PASSWORD=admin
     ```
 
-    Crea un file `phpmyadmin.env` e nella stessa directory:
+    Contenuto di `phpmyadmin.env`:
 
     ```
     # Impostazioni di phpMyAdmin
-    PMA_HOST: db
-    PMA_PORT: 3306
-    PMA_ARBITRARY: 1
+    PMA_HOST=db
+    PMA_PORT=3306
+    PMA_ARBITRARY=1
     UPLOAD_LIMIT=300M
     MEMORY_LIMIT=512M
 

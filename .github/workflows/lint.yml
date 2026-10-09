@@ -1,0 +1,33 @@
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  yamllint:
+    name: yamllint (compose, playbook, manifest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Installa yamllint
+        run: pip install yamllint
+      - name: Lint YAML
+        run: yamllint --strict docker ansible kubernetes .github
+
+  terraform:
+    name: terraform fmt + validate
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform/aws-lab
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - name: Formattazione
+        run: terraform fmt -check -recursive -diff
+      - name: Init senza backend
+        run: terraform init -backend=false
+      - name: Validate
+        run: terraform validate

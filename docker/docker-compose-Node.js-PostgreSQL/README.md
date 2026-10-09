@@ -9,6 +9,21 @@ Questo repository contiene un piccolo progetto realizzato con Node.js e PostgreS
 - **Docker**: Una piattaforma per costruire, distribuire ed eseguire applicazioni utilizzando container.
 - **Docker Compose**: Uno strumento per definire ed eseguire applicazioni Docker multi-container.
 
+## Avvio rapido
+
+```bash
+# 1. Crea i file di variabili d'ambiente partendo dai modelli (e cambia le password)
+cp postgres.env.example postgres.env
+cp node.env.example node.env
+
+# 2. Builda l'immagine dell'app dal Dockerfile e avvia lo stack
+docker compose up -d --build
+```
+
+I file `.env` reali sono esclusi da git tramite `.gitignore`: nella repo si versionano solo i `*.env.example`.
+
+L'immagine `web_node-node` non esiste su Docker Hub: viene costruita in locale dal `Dockerfile` grazie alla direttiva `build: .` nel `docker-compose.yaml`.
+
 ## Comandi generici
 
 - `docker-compose up`: Questo comando crea e avvia i container definiti nel file docker-compose.yml.
@@ -43,7 +58,7 @@ docker network rm $nomeRete
 
 ## Esempi comandi:
 
-`docker run -d --name node_dbpg_1 --network $nomeRete -p 5432:5432 -v ./scripts/full.sql:/docker-entrypoint-initdb.d/full.sql --restart always --env-file postgres.env postgres`
+`docker run -d --name node_dbpg_1 --network $nomeRete -p 5432:5432 -v ./scripts/full.sql:/docker-entrypoint-initdb.d/full.sql --restart always --env-file postgres.env postgres:17`
 
 1. **`docker run`**: Questo comando avvia un nuovo contenitore basato sull'immagine specificata alla fine del comando.
 
@@ -66,6 +81,12 @@ docker network rm $nomeRete
 In sintesi, questo comando avvia un contenitore in background basato sull'immagine `postgres`, lo nomina `node_dbpg_1`, mappa la porta 5432 del contenitore alla porta 5432 dell'host, monta uno script SQL per l'inizializzazione del database, configura il contenitore per riavviarsi automaticamente in caso di arresto anomalo e carica le variabili d'ambiente dal file `postgres.env`.
 
 ---
+
+Prima di avviare il container dell'app, costruisci l'immagine dal `Dockerfile` (eseguilo nella cartella del progetto):
+
+```bash
+docker build -t web_node-node .
+```
 
 `docker run -d --name node_web_node_1 --network $nomeRete -p 8080:8080 --env-file node.env web_node-node`
 

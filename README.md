@@ -1,5 +1,8 @@
 # Guide DevOps
 
+[![Lint](https://github.com/alexis-82/guide_devops/actions/workflows/lint.yml/badge.svg)](https://github.com/alexis-82/guide_devops/actions/workflows/lint.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+
 Raccolta personale di guide operative e appunti su strumenti e pratiche DevOps,
 testati su ambienti reali (lab VMware a 3 nodi, Oracle Cloud, Amazon AWS).
 
@@ -15,7 +18,7 @@ campo, configurazioni funzionanti da riusare. Tutto in italiano.
 Cluster `kubeadm` multi-nodo su VMware: comandi e manifest per il lavoro quotidiano.
 
 - **[Cheatsheet comandi `kubectl`](./kubernetes/comandi/)** — Comandi base per il lavoro quotidiano: pod, deployment, rollout, manifest YAML, pulizia risorse. Testato su cluster `kubeadm` v1.37.
-- **[Esempi YAML](./kubernetes/examples-yaml/)** — *(work in progress)*
+- **[Esempi YAML](./kubernetes/examples-yaml/)** — Dall'installazione all'uso: Deployment nginx, Service NodePort, MetalLB in Layer 2 e Ingress con Traefik.
 
 ### 🐳 [Docker](./docker/)
 
@@ -69,4 +72,4 @@ Appunti maturati sul campo tra sviluppo, self-hosting e sperimentazione DevOps.
 
 ## Licenza
 
-Repository personale a scopo didattico. Sentiti libero di consultare e adattare i contenuti.
+Distribuito con licenza [MIT](./LICENSE): puoi consultare, riusare e adattare liberamente guide e codice, mantenendo l'attribuzione.

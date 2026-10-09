@@ -7,14 +7,14 @@ Questa configurazione crea un ambiente Docker con MongoDB e Mongo Express, utili
 Il file `docker-compose.yml` definisce due servizi:
 
 1. **MongoDB**
-   - Immagine: `mongo`
+   - Immagine: `mongo:7.0`
    - Porta: 27017
    - IP statico: 192.168.1.195
    - Volume: `./mongo-data:/data/db`
    - Variabili d'ambiente: definite in `mongo.env`
 
 2. **Mongo Express**
-   - Immagine: `mongo-express`
+   - Immagine: `mongo-express:1.0.2`
    - Porta: 8081
    - IP statico: 192.168.1.194
    - Dipende da: MongoDB
@@ -23,6 +23,16 @@ Il file `docker-compose.yml` definisce due servizi:
 La rete `my_macvlan_network` è configurata come macvlan, utilizzando l'interfaccia `ens32` e la subnet 192.168.1.0/24.
 
 ## Variabili d'ambiente
+
+Nella repo ci sono solo i modelli `*.env.example`; i file reali sono esclusi da git tramite `.gitignore`. Prima dell'avvio copiali e cambia le password:
+
+```bash
+cp mongo.env.example mongo.env
+cp mongo-express.env.example mongo-express.env
+docker compose up -d
+```
+
+Valori di esempio:
 
 ### MongoDB (`mongo.env`)
 - Username root: admin
