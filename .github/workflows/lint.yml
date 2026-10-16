@@ -14,7 +14,7 @@ jobs:
       - name: Installa yamllint
         run: pip install yamllint
       - name: Lint YAML
-        run: yamllint --strict docker ansible kubernetes .github
+        run: yamllint --strict docker ansible kubernetes cicd .github
 
   terraform:
     name: terraform fmt + validate

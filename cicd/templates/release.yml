@@ -1,0 +1,92 @@
+# Release generica guidata dai tag: test -> build per OS (in parallelo) -> GitHub Release
+# Da copiare in .github/workflows/release.yml
+#
+# Funziona così com'è: al posto della build vera produce un file di testo
+# per ogni OS, utile per provare il giro completo su un repo di prova.
+# Poi sostituisci i blocchi marcati TODO con i comandi del tuo progetto.
+#
+# Avvio:  git tag -a v1.0.0 -m "v1.0.0" && git push origin v1.0.0
+# Un tag con trattino (v1.0.0-rc.1, v2.0.0-beta.2) diventa una pre-release.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+env:
+  APP: myapp  # TODO: nome del progetto, usato nei nomi dei file
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      # TODO: setup del linguaggio + test (come nel workflow di CI)
+      - name: Test
+        run: echo "TODO - esegui qui i test, ad es. npm ci && npm test"
+
+  build:
+    name: Build ${{ matrix.target }}
+    needs: test
+    strategy:
+      matrix:
+        include:  # TODO: tieni solo le piattaforme che ti servono
+          - os: ubuntu-24.04
+            target: linux-amd64
+          - os: windows-latest
+            target: windows-amd64
+          - os: macos-latest
+            target: macos-arm64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build
+        shell: bash  # bash anche su Windows (Git Bash): stessi comandi ovunque
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"   # v1.2.0 -> 1.2.0
+          mkdir -p dist
+          # TODO: build vera, con la versione passata al programma, ad es.
+          #   go build -ldflags "-X main.version=$GITHUB_REF_NAME" -o dist/...
+          #   npm run build && tar -czf dist/... build/
+          echo "$APP $VERSION per ${{ matrix.target }}" > "dist/$APP-$VERSION-${{ matrix.target }}.txt"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.target }}
+          path: dist/*
+          if-no-files-found: error
+
+  release:
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write  # unico job che può scrivere sul repo
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0  # storia completa e tag, per le note di rilascio
+      - uses: actions/download-artifact@v8
+        with:
+          path: dist
+          merge-multiple: true
+      - name: Checksum SHA-256
+        working-directory: dist
+        run: sha256sum * > SHA256SUMS.txt
+      - name: Note di rilascio (commit dal tag precedente)
+        run: |
+          prev=$(git describe --tags --abbrev=0 "${GITHUB_REF_NAME}^" 2>/dev/null || true)
+          git log --no-merges --pretty='- %s' "${prev:+$prev..}$GITHUB_REF_NAME" > notes.md
+          cat notes.md
+      - name: Crea la release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          flags=()
+          [[ "$GITHUB_REF_NAME" == *-* ]] && flags+=(--prerelease)
+          gh release create "$GITHUB_REF_NAME" dist/* \
+            --title "$GITHUB_REF_NAME" \
+            --notes-file notes.md \
+            --verify-tag \
+            "${flags[@]}"
