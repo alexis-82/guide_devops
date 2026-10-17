@@ -52,12 +52,12 @@ Installazione di Terraform su Linux e provisioning su AWS.
 - **[aws-lab](./terraform/aws-lab/)** — Lab EC2 + RDS + S3 (VPC, IAM, SSM, budget), su Floci o AWS reale.
 - **[Floci](./terraform/floci/)** — Setup di una VM Linux per l'emulatore AWS locale Floci: AWS CLI e Terraform senza account AWS.
 
-### 🚀 [CI/CD](./cicd/)
+### 🚀 [CI/CD](./cicd/)
 
 Pipeline con GitHub Actions: test a ogni push e rilascio automatico dal tag Git alla GitHub Release.
 
-- **[Guida generica + template](./cicd/)** — Concetti, scelta degli strumenti, anatomia dei workflow, versionamento, segreti. Template di CI per Node.js, Python e Go, release multi-OS e immagine Docker su `ghcr.io`.
-- **[Caso pratico: rilascio di Zenith (Go + Wails)](./cicd/zenith/)** — Build Windows (installer NSIS) e Linux in parallelo, versione iniettata dal tag, file allineati con l'updater dell'app.
+- **[Guida generica + template](./cicd/)** — Concetti, scelta degli strumenti, anatomia dei workflow, versionamento, segreti. Template di CI per Node.js, Python e Go, release multi-OS e immagine Docker su `ghcr.io`.
+- **[Caso pratico: rilascio di Zenith (Go + Wails)](./cicd/zenith/)** — Build Windows (installer NSIS) e Linux in parallelo, versione iniettata dal tag, file allineati con l'updater dell'app.
 
 ---
 
