@@ -74,7 +74,6 @@ Nella ricerca escono tanti nomi che fanno cose diverse. Facciamo ordine.
 | GitLab CI              | CI/CD                     | Ottimo, ma ha senso se il codice sta su GitLab.                                             |
 | Jenkins                | CI/CD self-hosted         | Server da installare e mantenere: troppo per iniziare.                                      |
 | CircleCI / Azure Pipelines | CI/CD (SaaS)          | Alternative valide, nessun vantaggio rispetto ad Actions per un repo su GitHub.             |
-| **GitKraken**          | Client Git grafico        | ⚠️ **Non è uno strumento CI/CD.** È un'interfaccia per Git (commit, branch, merge, tag). Puoi usarlo per *creare e pushare il tag* che avvia la pipeline (vedi §7), ma la pipeline la esegue GitHub Actions. |
 | GoReleaser             | Tool di release per Go    | Ottimo per CLI Go pure. Per Wails (cgo + frontend + installer NSIS) si complica: meglio comandi espliciti. |
 | release-please / semantic-release | Automazione versioni | Calcolano il numero di versione dai messaggi di commit. Passo successivo, vedi §9.   |
 
