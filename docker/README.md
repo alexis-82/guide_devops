@@ -128,6 +128,8 @@ Ecco alcuni dei comandi principali di Docker che potrebbero esserti utili:
 
 ## Pulizia generica
 - `docker system prune -a --volumes`: Rimuovere tutti i contenitori, le reti, le immagini (sia sospese che inutilizzate) e, facoltativamente, i volumi inutilizzati.
+- `docker system prune -a`: Rimuovere tutti i contenitori, le reti, le immagini (sia sospese che inutilizzate) e, facoltativamente, ma i volumi restano.
+- `docker builder prune -a`: Ripulisce tutta la cache.
 
 ---
 
